@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import heroBg from './assets/hero-bg.png';
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -51,7 +52,7 @@ function App() {
 </div>
 </nav>
 {/* Hero Section */}
-<section className="relative w-full h-[80vh] min-h-[600px] flex items-center bg-inverse-surface text-on-primary" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFXGODU38W8D093VMbuAC9dAhnRbGskOgXDLIo0LA4asddHnshxIO1lEUoWhFtILS_2tD-yqR_7Ph9LCUDlvBtINl4wNDxvB1wOr7lfD56Kib3_TMV86XPc1w3dGhQZbi2UrLaTWwZt0968ON4YQF5BgtBU3SDpDD9P2tdQTynFV817W_gwhMQu7ycK2-lIb8jvDOkUcyLcVWjjAyEs0eQoKJFaqWNNyfPqGq633VpO0x-EIleK7JtW5Fzp-_B1ZMl_-7yFFgCgS8')", backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<section className="relative w-full h-[80vh] min-h-[600px] flex items-center bg-inverse-surface text-on-primary" style={{backgroundImage: `url(${heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="absolute inset-0 bg-primary/70"></div>
 <div className="relative z-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
 <div className="max-w-2xl">
@@ -193,14 +194,15 @@ function App() {
 <span className="material-symbols-outlined text-primary mt-1">location_on</span>
 <div>
 <h4 className="font-label-md text-label-md text-primary mb-1">Office</h4>
-<p className="font-body-md text-body-md text-on-surface-variant">서울특별시 강남구 테헤란로 123, 한길빌딩 4층</p>
+<p className="font-body-md text-body-md text-on-surface-variant">경남 창원시 마산회원구</p>
 </div>
 </div>
 <div className="flex items-start gap-4">
 <span className="material-symbols-outlined text-primary mt-1">mail</span>
 <div>
 <h4 className="font-label-md text-label-md text-primary mb-1">Email</h4>
-<p className="font-body-md text-body-md text-on-surface-variant">contact@hangillogic.com</p>
+<p className="font-body-md text-body-md text-on-surface-variant">wonname@naver.com</p>
+<p className="font-body-md text-body-md text-on-surface-variant">010-8308-0882</p>
 </div>
 </div>
 </div>
@@ -234,7 +236,7 @@ function App() {
                 Hangil Logic
             </div>
 <div className="font-body-md text-body-md text-on-secondary-container dark:text-on-primary-container text-center md:text-left">
-                © 2024 Hangil Logic. Engineering Integrity, Technical Persistence.
+                © 2026 Hangil Logic. Engineering Integrity, Technical Persistence.
             </div>
 <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 font-body-md text-body-md mt-6 md:mt-0">
 <a className="text-on-secondary-container dark:text-on-primary-container hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 opacity-100 hover:opacity-80 transition-opacity" href="#">Privacy Policy</a>

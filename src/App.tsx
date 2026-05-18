@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import heroBg from './assets/hero-bg.png';
+import integrityImg from './assets/integrity.png';
+import project1Img from './assets/project1.png';
+import project2Img from './assets/project2.png';
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -78,12 +81,12 @@ function App() {
                         우리는 타협하지 않습니다. 클라이언트의 비즈니스가 흔들림 없이 성장할 수 있도록, 기초부터 탄탄한 기술적 토대를 제공하는 것이 우리의 사명입니다.
                     </p>
 </div>
-<div className="relative h-[400px] bg-surface rounded-xl border border-outline-variant/50 overflow-hidden flex items-center justify-center">
-<div className="absolute inset-0 bg-gradient-to-br from-surface-variant to-surface-container-lowest opacity-50"></div>
+<div className="relative h-[400px] rounded-xl border border-outline-variant/50 overflow-hidden flex items-center justify-center shadow-lg" style={{backgroundImage: `url(${integrityImg})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="absolute inset-0 bg-surface/80 backdrop-blur-sm transition-opacity hover:opacity-90"></div>
 <div className="text-center z-10 p-8">
 <span className="material-symbols-outlined text-display-lg text-primary mb-4" style={{fontVariationSettings: "'FILL' 1"}}>architecture</span>
-<h3 className="font-headline-md text-headline-md text-primary mb-2">Engineering Integrity</h3>
-<p className="font-body-md text-body-md text-secondary">기술적 무결성</p>
+<h3 className="font-headline-md text-headline-md text-primary mb-2 drop-shadow-sm">Engineering Integrity</h3>
+<p className="font-body-md text-body-md text-on-surface-variant font-bold">기술적 무결성</p>
 </div>
 </div>
 </div>
@@ -150,10 +153,10 @@ function App() {
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 {/* Project Card 1 */}
-<div className="border border-outline-variant/50 rounded overflow-hidden bg-surface group">
-<div className="h-64 bg-surface-variant relative overflow-hidden flex items-center justify-center">
-<div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PHBhdGggZD0iTTAgMGgyMHYyMEgwem0xMCAxMGgxMHYxMEgxMHoiIGZpbGw9IiNlNWVlZmYiIGZpbGwtb3BhY2l0eT0iLjUiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==')] opacity-50"></div>
-<span className="material-symbols-outlined text-display-lg text-primary/30 z-10">smart_toy</span>
+<div className="border border-outline-variant/50 rounded overflow-hidden bg-surface group hover:shadow-lg transition-shadow">
+<div className="h-64 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:scale-105" style={{backgroundImage: `url(${project1Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="absolute inset-0 bg-surface-variant/40 group-hover:bg-surface-variant/10 transition-colors duration-300"></div>
+<span className="material-symbols-outlined text-display-lg text-white drop-shadow-md z-10 opacity-90">smart_toy</span>
 </div>
 <div className="p-6">
 <div className="flex gap-2 mb-4">
@@ -165,10 +168,10 @@ function App() {
 </div>
 </div>
 {/* Project Card 2 */}
-<div className="border border-outline-variant/50 rounded overflow-hidden bg-surface group">
-<div className="h-64 bg-surface-variant relative overflow-hidden flex items-center justify-center">
-<div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PHBhdGggZD0iTTAgMGgyMHYyMEgwem0xMCAxMGgxMHYxMEgxMHoiIGZpbGw9IiNlNWVlZmYiIGZpbGwtb3BhY2l0eT0iLjUiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==')] opacity-50"></div>
-<span className="material-symbols-outlined text-display-lg text-primary/30 z-10">database</span>
+<div className="border border-outline-variant/50 rounded overflow-hidden bg-surface group hover:shadow-lg transition-shadow">
+<div className="h-64 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:scale-105" style={{backgroundImage: `url(${project2Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="absolute inset-0 bg-surface-variant/40 group-hover:bg-surface-variant/10 transition-colors duration-300"></div>
+<span className="material-symbols-outlined text-display-lg text-white drop-shadow-md z-10 opacity-90">database</span>
 </div>
 <div className="p-6">
 <div className="flex gap-2 mb-4">

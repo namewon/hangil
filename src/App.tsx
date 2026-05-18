@@ -3,6 +3,7 @@ import heroBg from './assets/hero-bg.png';
 import integrityImg from './assets/integrity.png';
 import project1Img from './assets/project1.png';
 import project2Img from './assets/project2.png';
+import project3Img from './assets/project3.png';
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -151,7 +152,7 @@ function App() {
 <p className="font-body-md text-body-md text-on-surface-variant">한길로직의 기술력이 담긴 주요 포트폴리오입니다.</p>
 </div>
 </div>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-8">
 {/* Project Card 1 */}
 <div className="border border-outline-variant/50 rounded overflow-hidden bg-surface group hover:shadow-lg transition-shadow">
 <div className="h-64 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:scale-105" style={{backgroundImage: `url(${project1Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
@@ -180,6 +181,22 @@ function App() {
 </div>
 <h3 className="font-headline-md text-headline-md text-primary mb-2">대용량 데이터 처리 물류 관리 시스템</h3>
 <p className="font-body-md text-body-md text-on-surface-variant mb-4">초당 수만 건의 트랜잭션을 처리하는 마이크로서비스 아키텍처 기반의 백엔드 시스템 구축 및 실시간 대시보드 웹 애플리케이션 개발.</p>
+</div>
+</div>
+{/* Project Card 3 */}
+<div className="border border-outline-variant/50 rounded overflow-hidden bg-surface group hover:shadow-lg transition-shadow">
+<div className="h-64 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:scale-105" style={{backgroundImage: `url(${project3Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="absolute inset-0 bg-surface-variant/40 group-hover:bg-surface-variant/10 transition-colors duration-300"></div>
+<span className="material-symbols-outlined text-display-lg text-white drop-shadow-md z-10 opacity-90">monitoring</span>
+</div>
+<div className="p-6">
+<div className="flex gap-2 mb-4">
+<span className="px-2 py-1 bg-surface-container-highest text-primary font-code-sm text-code-sm rounded">Fintech</span>
+<span className="px-2 py-1 bg-surface-container-highest text-primary font-code-sm text-code-sm rounded">AI</span>
+<span className="px-2 py-1 bg-surface-container-highest text-primary font-code-sm text-code-sm rounded">Dashboard</span>
+</div>
+<h3 className="font-headline-md text-headline-md text-primary mb-2">Lumen Finance (루멘 파이낸스)</h3>
+<p className="font-body-md text-body-md text-on-surface-variant mb-4">Soullinked와 협력하여 구축한 차세대 핀테크 플랫폼. AI 기반 고급 데이터 분석 및 하이테크 대시보드를 통한 금융 시각화 시스템 개발.</p>
 </div>
 </div>
 </div>

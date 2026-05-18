@@ -3,6 +3,8 @@ import heroBg from './assets/hero-bg.png';
 import integrityImg from './assets/integrity.png';
 import project1Img from './assets/project1.png';
 import project2Img from './assets/project2.png';
+import cctv1Img from './assets/cctv1.jpg';
+import cctv2Img from './assets/cctv2.jpg';
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -151,7 +153,7 @@ function App() {
 <p className="font-body-md text-body-md text-on-surface-variant">한길로직의 기술력이 담긴 주요 포트폴리오입니다.</p>
 </div>
 </div>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-8">
 {/* Project Card 1 */}
 <div className="border border-outline-variant/50 rounded overflow-hidden bg-surface group hover:shadow-lg transition-shadow">
 <div className="h-64 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:scale-105" style={{backgroundImage: `url(${project1Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
@@ -180,6 +182,23 @@ function App() {
 </div>
 <h3 className="font-headline-md text-headline-md text-primary mb-2">대용량 데이터 처리 물류 관리 시스템</h3>
 <p className="font-body-md text-body-md text-on-surface-variant mb-4">초당 수만 건의 트랜잭션을 처리하는 마이크로서비스 아키텍처 기반의 백엔드 시스템 구축 및 실시간 대시보드 웹 애플리케이션 개발.</p>
+</div>
+</div>
+{/* Project Card 3 */}
+<div className="border border-outline-variant/50 rounded overflow-hidden bg-surface group hover:shadow-lg transition-shadow">
+<div className="h-64 relative overflow-hidden flex transition-transform duration-500 group-hover:scale-105">
+<div className="w-1/2 h-full" style={{backgroundImage: `url(${cctv1Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+<div className="w-1/2 h-full border-l border-outline-variant/30" style={{backgroundImage: `url(${cctv2Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+<div className="absolute inset-0 bg-surface-variant/40 group-hover:bg-surface-variant/10 transition-colors duration-300"></div>
+<span className="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-display-lg text-white drop-shadow-md z-10 opacity-90">videocam</span>
+</div>
+<div className="p-6">
+<div className="flex gap-2 mb-4">
+<span className="px-2 py-1 bg-surface-container-highest text-primary font-code-sm text-code-sm rounded">AI Vision</span>
+<span className="px-2 py-1 bg-surface-container-highest text-primary font-code-sm text-code-sm rounded">Safety</span>
+</div>
+<h3 className="font-headline-md text-headline-md text-primary mb-2">지능형 AI 안전 감시 CCTV</h3>
+<p className="font-body-md text-body-md text-on-surface-variant mb-4">딥러닝 기반 실시간 영상 분석 시스템 구축. 산업 현장의 <strong>안전모 착용 여부 판별</strong>, <strong>불꽃/화재 감지</strong>, <strong>작업자 쓰러짐(이상 행동) 감지</strong> 기능을 통해 빈틈없는 재해 예방 솔루션을 제공합니다.</p>
 </div>
 </div>
 </div>

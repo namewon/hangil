@@ -81,12 +81,12 @@ function App() {
                         우리는 타협하지 않습니다. 클라이언트의 비즈니스가 흔들림 없이 성장할 수 있도록, 기초부터 탄탄한 기술적 토대를 제공하는 것이 우리의 사명입니다.
                     </p>
 </div>
-<div className="relative h-[400px] rounded-xl border border-outline-variant/50 overflow-hidden flex items-center justify-center shadow-lg" style={{backgroundImage: `url(${integrityImg})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
-<div className="absolute inset-0 bg-surface/80 backdrop-blur-sm transition-opacity hover:opacity-90"></div>
-<div className="text-center z-10 p-8">
-<span className="material-symbols-outlined text-display-lg text-primary mb-4" style={{fontVariationSettings: "'FILL' 1"}}>architecture</span>
-<h3 className="font-headline-md text-headline-md text-primary mb-2 drop-shadow-sm">Engineering Integrity</h3>
-<p className="font-body-md text-body-md text-on-surface-variant font-bold">기술적 무결성</p>
+<div className="relative h-[400px] rounded-xl border border-outline-variant/30 overflow-hidden flex items-center justify-center shadow-lg group" style={{backgroundImage: `url(${integrityImg})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="absolute inset-0 bg-linear-to-b from-primary/80 via-primary/50 to-primary-container/90 transition-opacity duration-300 group-hover:opacity-85"></div>
+<div className="text-center z-10 p-8 flex flex-col items-center">
+<span className="material-symbols-outlined text-display-lg text-white mb-4 drop-shadow-md" style={{fontVariationSettings: "'FILL' 1"}}>architecture</span>
+<h3 className="font-headline-md text-headline-md text-white mb-2 drop-shadow-md font-bold tracking-tight">Engineering Integrity</h3>
+<p className="font-body-md text-body-md text-white/90 font-medium tracking-wide">기술적 무결성</p>
 </div>
 </div>
 </div>

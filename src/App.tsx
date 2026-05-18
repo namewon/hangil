@@ -1,5 +1,8 @@
+import { useState } from 'react';
 
 function App() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <>
 
@@ -22,6 +25,29 @@ function App() {
                     Get in Touch
                 </a>
 </div>
+{/* Mobile Menu Button */}
+<button 
+  className="md:hidden flex items-center justify-center p-2 text-primary dark:text-on-primary-fixed"
+  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+  aria-label="Toggle menu"
+>
+  <span className="material-symbols-outlined text-3xl" style={{fontVariationSettings: "'FILL' 1"}}>
+    {isMobileMenuOpen ? 'close' : 'menu'}
+  </span>
+</button>
+</div>
+
+{/* Mobile Menu Dropdown */}
+<div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 border-t border-outline-variant/30' : 'max-h-0'}`}>
+  <div className="bg-surface dark:bg-surface px-margin-mobile py-6 flex flex-col gap-6 font-label-md text-label-md">
+    <a className="text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-on-primary-fixed transition-colors" href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</a>
+    <a className="text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-on-primary-fixed transition-colors" href="#services" onClick={() => setIsMobileMenuOpen(false)}>Services</a>
+    <a className="text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-on-primary-fixed transition-colors" href="#projects" onClick={() => setIsMobileMenuOpen(false)}>Projects</a>
+    <a className="text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-on-primary-fixed transition-colors" href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
+    <a className="bg-primary text-on-primary px-6 py-3 rounded text-center mt-2 hover:bg-primary/90 transition-colors" href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+      Get in Touch
+    </a>
+  </div>
 </div>
 </nav>
 {/* Hero Section */}
@@ -203,14 +229,14 @@ function App() {
 </section>
 {/* Footer (From JSON) */}
 <footer className="w-full border-t border-outline-variant bg-surface dark:bg-primary-container">
-<div className="max-w-container-max mx-auto px-margin-desktop py-12 flex flex-col md:flex-row justify-between items-center gap-gutter">
+<div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 flex flex-col md:flex-row justify-between items-center gap-gutter">
 <div className="font-headline-md text-headline-md font-bold text-primary dark:text-on-primary-fixed">
                 Hangil Logic
             </div>
 <div className="font-body-md text-body-md text-on-secondary-container dark:text-on-primary-container text-center md:text-left">
                 © 2024 Hangil Logic. Engineering Integrity, Technical Persistence.
             </div>
-<div className="flex items-center gap-6 font-body-md text-body-md">
+<div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 font-body-md text-body-md mt-6 md:mt-0">
 <a className="text-on-secondary-container dark:text-on-primary-container hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 opacity-100 hover:opacity-80 transition-opacity" href="#">Privacy Policy</a>
 <a className="text-on-secondary-container dark:text-on-primary-container hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 opacity-100 hover:opacity-80 transition-opacity" href="#">Terms of Service</a>
 <a className="text-on-secondary-container dark:text-on-primary-container hover:text-primary dark:hover:text-on-primary-fixed underline decoration-1 opacity-100 hover:opacity-80 transition-opacity" href="#">LinkedIn</a>

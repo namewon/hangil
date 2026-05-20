@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import heroBg from './assets/hero-bg.png';
 import integrityImg from './assets/integrity.png';
+import project1Img from './assets/project1.png';
 import project2Img from './assets/project2.png';
 import cctv1Img from './assets/cctv1.jpg';
 import cctv2Img from './assets/cctv2.jpg';
+import { supabase } from './supabaseClient';
+import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,6 +19,29 @@ function App() {
     '마우스를 움직이면 제가 따라볼게요.',
   ];
   const [robotMessageIndex, setRobotMessageIndex] = useState(0);
+
+  // 라우팅 및 관리자 로그인 상태
+  const [currentPath, setCurrentPath] = useState(window.location.hash);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+
+  // 문의하기 폼 입력 상태
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactMessage, setContactMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  // 이미지 모달 팝업 상태
+  const [activeImageModal, setActiveImageModal] = useState<string | null>(null);
+
+  // 해시 라우팅 이벤트 감지
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentPath(window.location.hash);
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -36,12 +63,63 @@ function App() {
     return () => window.clearInterval(messageTimer);
   }, [robotMessages.length]);
 
+  // 문의하기 양식 제출 핸들러
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactName.trim() || !contactEmail.trim() || !contactMessage.trim()) {
+      alert('모든 입력란을 작성해 주세요.');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const { error } = await supabase
+        .from('contacts')
+        .insert([
+          {
+            name: contactName,
+            email: contactEmail,
+            message: contactMessage,
+          },
+        ]);
+
+      if (error) throw error;
+
+      setSubmitStatus('success');
+      setContactName('');
+      setContactEmail('');
+      setContactMessage('');
+    } catch (err) {
+      console.error('문의 등록 실패:', err);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const robotTiltX = pointer.y * -12;
   const robotTiltY = pointer.x * 18;
   const robotShiftX = pointer.x * 24;
   const robotShiftY = pointer.y * 18;
   const robotEyeX = pointer.x * 10;
   const robotEyeY = pointer.y * 7;
+
+  // 관리자 모드 분기 렌더링
+  if (currentPath === '#/admin') {
+    if (isAdminLoggedIn) {
+      return <AdminDashboard onLogout={() => setIsAdminLoggedIn(false)} />;
+    }
+    return (
+      <AdminLogin
+        onLoginSuccess={() => setIsAdminLoggedIn(true)}
+        onBackToHome={() => {
+          window.location.hash = '';
+        }}
+      />
+    );
+  }
 
   return (
     <>
@@ -262,9 +340,25 @@ Full-stack Product Engineering Studio
 <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-8">
 {/* Project Card 1 */}
 <div className="border border-white/10 rounded-3xl overflow-hidden bg-white/10 group hover:shadow-2xl hover:shadow-blue-500/20 transition-all">
-<div className="h-64 relative overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:scale-105" style={{backgroundImage: `url(${project2Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
-<div className="absolute inset-0 bg-blue-950/45 group-hover:bg-blue-950/15 transition-colors duration-300"></div>
-<span className="material-symbols-outlined text-display-lg text-white drop-shadow-md z-10 opacity-90">database</span>
+<div className="h-64 overflow-hidden bg-[#0d1321] p-3 transition-transform duration-500 group-hover:scale-105 grid grid-cols-2 gap-2 relative">
+  <div 
+    onClick={() => setActiveImageModal(project1Img)}
+    className="h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/p1"
+  >
+    <img alt="대용량 물류 시스템 화면 1" className="h-full w-full object-cover" src={project1Img} />
+    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/p1:opacity-100 transition-opacity flex items-center justify-center">
+      <span className="material-symbols-outlined text-white text-xl">zoom_in</span>
+    </div>
+  </div>
+  <div 
+    onClick={() => setActiveImageModal(project2Img)}
+    className="h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/p2"
+  >
+    <img alt="대용량 물류 시스템 화면 2" className="h-full w-full object-cover" src={project2Img} />
+    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/p2:opacity-100 transition-opacity flex items-center justify-center">
+      <span className="material-symbols-outlined text-white text-xl">zoom_in</span>
+    </div>
+  </div>
 </div>
 <div className="p-6">
 <div className="flex gap-2 mb-4">
@@ -277,11 +371,25 @@ Full-stack Product Engineering Studio
 </div>
 {/* Project Card 2 */}
 <div className="border border-white/10 rounded-3xl overflow-hidden bg-white/10 group hover:shadow-2xl hover:shadow-emerald-500/20 transition-all">
-<div className="h-64 relative overflow-hidden flex transition-transform duration-500 group-hover:scale-105">
-<div className="w-1/2 h-full" style={{backgroundImage: `url(${cctv1Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
-<div className="w-1/2 h-full border-l border-outline-variant/30" style={{backgroundImage: `url(${cctv2Img})`, backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
-<div className="absolute inset-0 bg-emerald-950/45 group-hover:bg-emerald-950/15 transition-colors duration-300"></div>
-<span className="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-display-lg text-white drop-shadow-md z-10 opacity-90">videocam</span>
+<div className="h-64 overflow-hidden bg-[#0a1215] p-3 transition-transform duration-500 group-hover:scale-105 grid grid-cols-2 gap-2 relative">
+  <div 
+    onClick={() => setActiveImageModal(cctv1Img)}
+    className="h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/cctv1"
+  >
+    <img alt="지능형 CCTV 화면 1" className="h-full w-full object-cover" src={cctv1Img} />
+    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/cctv1:opacity-100 transition-opacity flex items-center justify-center">
+      <span className="material-symbols-outlined text-white text-xl">zoom_in</span>
+    </div>
+  </div>
+  <div 
+    onClick={() => setActiveImageModal(cctv2Img)}
+    className="h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/cctv2"
+  >
+    <img alt="지능형 CCTV 화면 2" className="h-full w-full object-cover" src={cctv2Img} />
+    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/cctv2:opacity-100 transition-opacity flex items-center justify-center">
+      <span className="material-symbols-outlined text-white text-xl">zoom_in</span>
+    </div>
+  </div>
 </div>
 <div className="p-6">
 <div className="flex gap-2 mb-4">
@@ -295,15 +403,55 @@ Full-stack Product Engineering Studio
 {/* Project Card 3 */}
 <div className="border border-white/10 rounded-3xl overflow-hidden bg-white/10 group hover:shadow-2xl hover:shadow-fuchsia-500/20 transition-all">
 <div className="h-64 overflow-hidden bg-black p-3 transition-transform duration-500 group-hover:scale-105">
-<div className="grid h-full grid-cols-3 grid-rows-2 gap-2">
-<img alt="Easyposter template collage" className="col-span-2 row-span-2 h-full w-full rounded object-cover" src="/hangil/easyposter/e.png"/>
-<img alt="Easyposter admin dashboard" className="h-full w-full rounded object-cover" src="/hangil/easyposter/e1.png"/>
-<div className="grid h-full grid-cols-2 grid-rows-2 gap-2">
-<img alt="Easyposter mobile editor" className="h-full w-full rounded object-cover" src="/hangil/easyposter/e2.png"/>
-<img alt="Easyposter printed poster" className="h-full w-full rounded object-cover" src="/hangil/easyposter/e3.png"/>
-<img alt="Easyposter simple UX flow" className="col-span-2 h-full w-full rounded object-cover" src="/hangil/easyposter/e4.png"/>
-</div>
-</div>
+  <div className="grid h-full grid-cols-3 grid-rows-2 gap-2">
+    <div 
+      onClick={() => setActiveImageModal('/hangil/easyposter/e.png')}
+      className="col-span-2 row-span-2 h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/e1"
+    >
+      <img alt="Easyposter template collage" className="h-full w-full object-cover" src="/hangil/easyposter/e.png"/>
+      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/e1:opacity-100 transition-opacity flex items-center justify-center">
+        <span className="material-symbols-outlined text-white text-xl">zoom_in</span>
+      </div>
+    </div>
+    <div 
+      onClick={() => setActiveImageModal('/hangil/easyposter/e1.png')}
+      className="h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/e2"
+    >
+      <img alt="Easyposter admin dashboard" className="h-full w-full object-cover" src="/hangil/easyposter/e1.png"/>
+      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/e2:opacity-100 transition-opacity flex items-center justify-center">
+        <span className="material-symbols-outlined text-white text-lg">zoom_in</span>
+      </div>
+    </div>
+    <div className="grid h-full grid-cols-2 grid-rows-2 gap-1.5">
+      <div 
+        onClick={() => setActiveImageModal('/hangil/easyposter/e2.png')}
+        className="h-full rounded-xl overflow-hidden cursor-zoom-in relative group/e3"
+      >
+        <img alt="Easyposter mobile editor" className="h-full w-full object-cover" src="/hangil/easyposter/e2.png"/>
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/e3:opacity-100 transition-opacity flex items-center justify-center">
+          <span className="material-symbols-outlined text-white text-sm">zoom_in</span>
+        </div>
+      </div>
+      <div 
+        onClick={() => setActiveImageModal('/hangil/easyposter/e3.png')}
+        className="h-full rounded-xl overflow-hidden cursor-zoom-in relative group/e4"
+      >
+        <img alt="Easyposter printed poster" className="h-full w-full object-cover" src="/hangil/easyposter/e3.png"/>
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/e4:opacity-100 transition-opacity flex items-center justify-center">
+          <span className="material-symbols-outlined text-white text-sm">zoom_in</span>
+        </div>
+      </div>
+      <div 
+        onClick={() => setActiveImageModal('/hangil/easyposter/e4.png')}
+        className="col-span-2 h-full rounded-xl overflow-hidden cursor-zoom-in relative group/e5"
+      >
+        <img alt="Easyposter simple UX flow" className="h-full w-full object-cover" src="/hangil/easyposter/e4.png"/>
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/e5:opacity-100 transition-opacity flex items-center justify-center">
+          <span className="material-symbols-outlined text-white text-sm">zoom_in</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div className="p-6">
 <div className="flex gap-2 mb-4">
@@ -318,13 +466,37 @@ Full-stack Product Engineering Studio
 <div className="border border-white/10 rounded-3xl overflow-hidden bg-white/10 group hover:shadow-2xl hover:shadow-rose-500/20 transition-all lg:col-span-3">
 <div className="grid grid-cols-1 lg:grid-cols-2">
 <div className="h-80 overflow-hidden bg-[#f8f3ed] p-3 transition-transform duration-500 group-hover:scale-[1.02]">
-<div className="grid h-full grid-cols-3 gap-2">
-<img alt="BEAUTIS.AI hair catalog" className="col-span-2 h-full w-full rounded-2xl object-cover object-top" src="/hangil/beautis/b1.JPG"/>
-<div className="grid h-full grid-rows-2 gap-2">
-<img alt="BEAUTIS.AI owner studio" className="h-full w-full rounded-2xl object-cover object-top" src="/hangil/beautis/b2.JPG"/>
-<img alt="BEAUTIS.AI franchise studio" className="h-full w-full rounded-2xl object-cover object-top" src="/hangil/beautis/b3.JPG"/>
-</div>
-</div>
+  <div className="grid h-full grid-cols-3 gap-2">
+    <div 
+      onClick={() => setActiveImageModal('/hangil/beautis/b1.JPG')}
+      className="col-span-2 h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/b1"
+    >
+      <img alt="BEAUTIS.AI hair catalog" className="h-full w-full object-cover object-top" src="/hangil/beautis/b1.JPG"/>
+      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/b1:opacity-100 transition-opacity flex items-center justify-center">
+        <span className="material-symbols-outlined text-white text-3xl">zoom_in</span>
+      </div>
+    </div>
+    <div className="grid h-full grid-rows-2 gap-2">
+      <div 
+        onClick={() => setActiveImageModal('/hangil/beautis/b2.JPG')}
+        className="h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/b2"
+      >
+        <img alt="BEAUTIS.AI owner studio" className="h-full w-full object-cover object-top" src="/hangil/beautis/b2.JPG"/>
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/b2:opacity-100 transition-opacity flex items-center justify-center">
+          <span className="material-symbols-outlined text-white text-xl">zoom_in</span>
+        </div>
+      </div>
+      <div 
+        onClick={() => setActiveImageModal('/hangil/beautis/b3.JPG')}
+        className="h-full rounded-2xl overflow-hidden cursor-zoom-in relative group/b3"
+      >
+        <img alt="BEAUTIS.AI franchise studio" className="h-full w-full object-cover object-top" src="/hangil/beautis/b3.JPG"/>
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/b3:opacity-100 transition-opacity flex items-center justify-center">
+          <span className="material-symbols-outlined text-white text-xl">zoom_in</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div className="p-8 flex flex-col justify-center">
 <div className="flex flex-wrap gap-2 mb-4">
@@ -372,22 +544,54 @@ Full-stack Product Engineering Studio
 </div>
 </div>
 <div className="bg-white/85 p-8 rounded-3xl border border-white shadow-2xl shadow-blue-500/15">
-<form className="space-y-6">
+<form onSubmit={handleContactSubmit} className="space-y-6">
 <div>
 <label className="block font-label-md text-label-md text-slate-950 mb-2">이름 / 회사명</label>
-<input className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 font-body-md focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/20 outline-none transition-colors" type="text"/>
+<input 
+  required
+  value={contactName}
+  onChange={(e) => setContactName(e.target.value)}
+  className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 font-body-md focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/20 outline-none transition-colors" 
+  type="text"
+/>
 </div>
 <div>
 <label className="block font-label-md text-label-md text-slate-950 mb-2">이메일</label>
-<input className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 font-body-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-colors" type="email"/>
+<input 
+  required
+  value={contactEmail}
+  onChange={(e) => setContactEmail(e.target.value)}
+  className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 font-body-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-colors" 
+  type="email"
+/>
 </div>
 <div>
 <label className="block font-label-md text-label-md text-slate-950 mb-2">문의 내용</label>
-<textarea className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 font-body-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors" rows={4}></textarea>
+<textarea 
+  required
+  value={contactMessage}
+  onChange={(e) => setContactMessage(e.target.value)}
+  className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 font-body-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-colors" 
+  rows={4}
+></textarea>
 </div>
-<button className="w-full bg-linear-to-r from-fuchsia-600 via-blue-600 to-emerald-500 text-white font-label-md text-label-md py-4 rounded-full shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-transform" type="button">
-                            문의하기
-                        </button>
+<button 
+  disabled={isSubmitting}
+  className="w-full bg-linear-to-r from-fuchsia-600 via-blue-600 to-emerald-500 text-white font-label-md text-label-md py-4 rounded-full shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2 cursor-pointer" 
+  type="submit"
+>
+  {isSubmitting ? (
+    <>
+      <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span>전송 중...</span>
+    </>
+  ) : (
+    <span>문의하기</span>
+  )}
+</button>
 </form>
 </div>
 </div>
@@ -400,7 +604,7 @@ Full-stack Product Engineering Studio
                 Hangil Logic
             </div>
 <div className="font-body-md text-body-md text-white/60 text-center md:text-left">
-                © 2026 Hangil Logic. Engineering Integrity, Technical Persistence.
+                © 2026 <a href="#/admin" className="hover:text-fuchsia-400 transition-colors duration-200">Hangil Logic</a>. Engineering Integrity, Technical Persistence.
             </div>
 <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 font-body-md text-body-md mt-6 md:mt-0">
 <a className="text-white/60 hover:text-fuchsia-300 underline decoration-1 opacity-100 hover:opacity-80 transition-opacity" href="#">Privacy Policy</a>
@@ -410,6 +614,75 @@ Full-stack Product Engineering Studio
 </div>
 </div>
 </footer>
+
+{/* 문의 등록 성공/실패 피드백 모달 */}
+{submitStatus !== 'idle' && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-all duration-300">
+    <div className="bg-[#0b111e] border border-white/10 w-full max-w-md rounded-3xl p-8 shadow-2xl text-center relative overflow-hidden">
+      {/* 장식용 은은한 그라디언트 배경 원 */}
+      <div className="absolute -top-24 -left-24 w-48 h-48 bg-fuchsia-600/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-600/10 rounded-full blur-2xl pointer-events-none"></div>
+      
+      {submitStatus === 'success' ? (
+        <>
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6">
+            <span className="material-symbols-outlined text-4xl" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span>
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">문의가 소중히 접수되었습니다!</h3>
+          <p className="text-sm text-slate-400 leading-relaxed mb-6">
+            남겨주신 프로젝트 의뢰 및 문의 사항이 성공적으로 등록되었습니다.<br />
+            담당 엔지니어가 신속하게 확인 후 회신해 드리겠습니다.
+          </p>
+          <button
+            onClick={() => setSubmitStatus('idle')}
+            className="w-full bg-linear-to-r from-fuchsia-600 via-blue-600 to-emerald-500 text-white font-semibold py-3.5 rounded-2xl shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer"
+          >
+            확인
+          </button>
+        </>
+      ) : (
+        <>
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-6">
+            <span className="material-symbols-outlined text-4xl" style={{fontVariationSettings: "'FILL' 1"}}>error</span>
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">접수 중 문제가 발생했습니다</h3>
+          <p className="text-sm text-slate-400 leading-relaxed mb-6">
+            일시적인 통신 네트워크 오류가 발생했거나 데이터 전송이 불완전합니다.<br />
+            wonname@naver.com 으로 직접 메일을 남겨주시면 빠르게 안내해 드리겠습니다.
+          </p>
+          <button
+            onClick={() => setSubmitStatus('idle')}
+            className="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3.5 rounded-2xl shadow-lg transition-colors cursor-pointer"
+          >
+            다시 시도
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+)}
+
+{/* 포트폴리오 이미지 크게 보기 모달 */}
+{activeImageModal && (
+  <div 
+    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm transition-all duration-300 cursor-zoom-out"
+    onClick={() => setActiveImageModal(null)}
+  >
+    <div className="relative max-w-5xl max-h-[90vh] rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-transform duration-300 animate-[scale-up_0.2s_ease-out]" onClick={(e) => e.stopPropagation()}>
+      <img 
+        alt="포트폴리오 확대 이미지" 
+        className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-inner" 
+        src={activeImageModal} 
+      />
+      <button 
+        onClick={() => setActiveImageModal(null)}
+        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-colors cursor-pointer"
+      >
+        <span className="material-symbols-outlined">close</span>
+      </button>
+    </div>
+  </div>
+)}
 
     </>
   );
